@@ -1,0 +1,33 @@
+from fastapi import FastAPI
+
+app = FastAPI()
+
+books = [
+    {"id": 1, "title": "Python", "author": "John", "genre": "Technology", "language": "English", "available": True},
+    {"id": 2, "title": "The Guide", "author": "R K Narayan", "genre": "Fiction", "language": "English", "available": True},
+    {"id": 3, "title": "History", "author": "Raj", "genre": "History", "language": "Hindi", "available": False},
+    {"id": 4, "title": "Science", "author": "Ram", "genre": "Science", "language": "English", "available": True},
+    {"id": 5, "title": "Stories", "author": "Shyam", "genre": "Fiction", "language": "Telugu", "available": True},
+    {"id": 6, "title": "Math", "author": "Amit", "genre": "Education", "language": "Hindi", "available": False}
+]
+
+@app.get("/")
+def home():
+    return {"message": "Library API is running"}
+
+@app.get("/books")
+def get_books(genre: str = None):
+    if genre:
+        return [book for book in books if book["genre"] == genre]
+    return books
+
+@app.get("/books/{book_id}")
+def get_book(book_id: int):
+    for book in books:
+        if book["id"] == book_id:
+            return book
+    return {"error": "Book not found"}
+
+@app.get("/books-by-language")
+def get_language(language: str):
+    return [book for book in books if book["language"] == language]
